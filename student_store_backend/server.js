@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const { PORT } = require("./config");
 const { NotFoundError } = require("./utils/errors");
+const security = require("./middleware/security");
 const authRoutes = require("./routes/auth");
 const ordRoutes = require("./routes/orders");
 const storeRoutes = require("./routes/store");
@@ -21,7 +22,8 @@ app.use(morgan("tiny"));
 app.use("/auth", authRoutes);
 app.use("/orders", ordRoutes);
 app.use("/store", storeRoutes);
-
+//for every req check is user/token exists in auth header, if yes attach decoded user
+app.use(security.extractUserFromJwt);
 /** Handle 404 errors -- this matches everything */
 app.use((req, res, next) => {
   return next(new NotFoundError());
