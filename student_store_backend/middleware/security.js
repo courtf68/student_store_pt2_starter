@@ -30,6 +30,7 @@ const requireAuthenticatedUser = (req, res, next) => {
   try {
     const { user } = res.locals;
     if (!user?.email) {
+      //checking for emails
       throw new UnathorizedError();
     }
     return next();

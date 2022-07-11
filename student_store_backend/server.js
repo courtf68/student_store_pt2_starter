@@ -18,12 +18,12 @@ app.use(cors());
 app.use(express.json());
 // log requests info
 app.use(morgan("tiny"));
-
+//for every req check is user/token exists in auth header, if yes attach decoded user
+app.use(security.extractUserFromJwt);
 app.use("/auth", authRoutes);
 app.use("/orders", ordRoutes);
 app.use("/store", storeRoutes);
-//for every req check is user/token exists in auth header, if yes attach decoded user
-app.use(security.extractUserFromJwt);
+
 /** Handle 404 errors -- this matches everything */
 app.use((req, res, next) => {
   return next(new NotFoundError());
